@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
     public TextMeshProUGUI winText;
     public TextMeshProUGUI positionText; // For displaying the player's position
     public TextMeshProUGUI velocityText; // For displaying the player's velocity
+    public TextMeshProUGUI distanceText; // For displaying distance to closest pickup
 
     private Vector3 lastPosition; // Store the last position for velocity calculation
     private Vector3 velocity; // Store the calculated velocity
@@ -38,6 +39,8 @@ public class PlayerController : MonoBehaviour {
     void Update() {
         CalculateVelocity();
         DisplayDebugInfo();
+        // You might have a function in the GameController to get the distance 
+        // to the nearest pickup. That function can update distanceText.
     }
 
     void OnTriggerEnter(Collider other) {
