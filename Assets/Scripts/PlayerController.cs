@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour {
     public float speed;
     public Vector2 moveValue;
     private int count;
-    private int numPickups = 8; // Add the number of pickups you have
+    private int numPickups = 3; // Add the number of pickups you have
     public TextMeshProUGUI scoreText; // For displaying score
     public TextMeshProUGUI winText; // For displaying win message
 
