@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Added to use the Text class
-using TMPro; // Added to use TextMeshProUGUI class
+using UnityEngine.UI; 
+using TMPro; 
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour {
@@ -10,14 +10,20 @@ public class PlayerController : MonoBehaviour {
     public float speed;
     public Vector2 moveValue;
     private int count;
-    private int numPickups = 3; // Add the number of pickups you have
-    public TextMeshProUGUI scoreText; // For displaying score
-    public TextMeshProUGUI winText; // For displaying win message
+    private int numPickups = 3; 
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI winText;
+    public TextMeshProUGUI positionText; // For displaying the player's position
+    public TextMeshProUGUI velocityText; // For displaying the player's velocity
+
+    private Vector3 lastPosition; // Store the last position for velocity calculation
+    private Vector3 velocity; // Store the calculated velocity
 
     void Start() {
         count = 0;
-        winText.text = ""; // Initialize the winText to an empty string
-        SetCountText(); // Set the initial count text
+        winText.text = "";
+        SetCountText();
+        lastPosition = transform.position; // Initialize last position at the start
     }
 
     void OnMove(InputValue value) {
@@ -29,11 +35,16 @@ public class PlayerController : MonoBehaviour {
         GetComponent<Rigidbody>().AddForce(movement * speed * Time.fixedDeltaTime);
     }
 
+    void Update() {
+        CalculateVelocity();
+        DisplayDebugInfo();
+    }
+
     void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "PickUp") {
             other.gameObject.SetActive(false);
-            count++; // Increment the count by 1 when a pickup is collected
-            SetCountText(); // Update the score text whenever a pickup is collected
+            count++; 
+            SetCountText(); 
         }
     }
 
@@ -42,5 +53,15 @@ public class PlayerController : MonoBehaviour {
         if (count >= numPickups) {
             winText.text = "You win!";
         }
+    }
+
+    private void CalculateVelocity() {
+        velocity = (transform.position - lastPosition) / Time.deltaTime;
+        lastPosition = transform.position;
+    }
+
+    private void DisplayDebugInfo() {
+        positionText.text = "Position: " + transform.position.ToString("0.00");
+        velocityText.text = "Velocity: " + velocity.ToString("0.00") + " | Speed: " + velocity.magnitude.ToString("0.00");
     }
 }
